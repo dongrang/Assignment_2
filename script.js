@@ -20,7 +20,26 @@ const overallTotal = document.getElementById('overall-total');
 const categoryTotal = document.getElementById('category-total');
 const expenseCount = document.getElementById('count');
 
-// 
 let list = [];
 let activeFilter = 'All';
 let activeSort = 'date-newest';
+
+// testing set
+let expenses = [
+  { id: 1, description: "Coffee", amount: 3.50, category: "Food", date: "2026-06-14" }
+];
+
+function renderExpenses() 
+{
+    expenseList.innerHTML = '';
+
+    if(expenses.length == 0)
+    {
+        list.innerHTML = '<p id="empty-message">No expense added yet.</p>';
+        return;
+    }
+
+    displayed.forEach(expense => {
+        
+    })
+}
