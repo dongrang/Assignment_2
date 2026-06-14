@@ -7,7 +7,7 @@
     <title>Expense Tracker</title>
 
     <link rel="stylesheet" href="styles.css"> <!-- Link styles.css-->
-    
+    <script src="script.js" defer></script> <!-- Link scripts.js-->
 
 </head>
 
@@ -15,9 +15,10 @@
 
 <body>
     <h1 class="top-banner">Expense Tracker</h1>
-
+    
+    <!-- Expense form -->
     <h2 for="expense-form">Add an expense:</h2>
-    <form class="expense-form" id ="expense-form"> <!-- Expense form -->
+    <form class="expense-form" id ="expense-form"> 
 
         <label for="description">Description:</label> <!-- Description -->
         <input type="text" id="description" />
@@ -46,6 +47,7 @@
         <p id="error-message"></p>
     </form>
 
+    <!-- Controls -->
     <div class="controls">
 
         <label for="filter-category">Filter by Category:</label>
@@ -71,10 +73,12 @@
         </select>
     </div>
 
+    <!-- Empty expense list -->
     <div class="expense-list" id="expense-list">
         <p id="empty-message">No expense added yet.</p>
     </div>
 
+    <!-- Totals -->
     <div id="totals">
         <p>Total: <span id="overall-total">$0.00</span></p>
         <div id="category-total">
