@@ -11,13 +11,11 @@
 
 </head>
 
-<script src="script.js"></script> <!-- Link scripts.js-->
-
 <body>
     <h1 class="top-banner">Expense Tracker</h1>
     
     <!-- Expense form -->
-    <h2 for="expense-form">Add an expense:</h2>
+    <h2>Add an expense:</h2>
     <form class="expense-form" id ="expense-form"> 
 
         <label for="description">Description:</label> <!-- Description -->
@@ -28,7 +26,7 @@
 
         <label for="category">Category:</label> <!-- Category -->
         <select id="category">
-            <option value="" disable selected></option>
+            <option value="" disable selected>Select Category</option>
             <option value="Food">Food</option>
             <option value="Transport">Transport</option>
             <option value="Entertainment">Entertainment</option>
@@ -52,7 +50,7 @@
 
         <label for="filter-category">Filter by Category:</label>
         <select id="filter-category">
-            <option value="" disable selected></option>
+            <option value="" disable selected>Select Category</option>
             <option value="All">All Categories</option>
             <option value="Food">Food</option>
             <option value="Transport">Transport</option>
