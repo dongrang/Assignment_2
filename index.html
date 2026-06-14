@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+
+    <link rel="stylesheet" href="styles.css"> <!-- Link styles.css-->
+    
+
+</head>
+
+<script src="script.js"></script> <!-- Link scripts.js-->
+
+<body>
+    <h1 class="top-banner">Expense Tracker</h1>
+
+    <h2 for="expense-form">Add an expense:</h2>
+    <form class="expense-form" id ="expense-form"> <!-- Expense form -->
+
+        <label for="description">Description:</label> <!-- Description -->
+        <input type="text" id="description" />
+
+        <label for="amount">Amount:</label> <!-- Amount -->
+        <input type="number" id="amount" min="0" step="0.01" />
+
+        <label for="category">Category:</label> <!-- Category -->
+        <select id="category">
+            <option value="" disable selected></option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Housing/Utilities">Housing/Utilities</option>
+            <option value="Health/Wellness">Health/Wellness</option>
+            <option value="Loan Repayment">Loan Repayments</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="date">Date: </label> <!-- Date -->
+        <input type="date" id="date"/>
+
+        <button type="submit">Add Expense</button>
+
+        <p id="error-message"></p>
+    </form>
+
+    <div class="controls">
+
+        <label for="filter-category">Filter by Category:</label>
+        <select id="filter-category">
+            <option value="" disable selected></option>
+            <option value="All">All Categories</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Housing/Utilities">Housing/Utilities</option>
+            <option value="Health/Wellness">Health/Wellness</option>
+            <option value="Loan Repayment">Loan Repayments</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="sort-by">Sort by:</label>
+        <select id="sort-by">
+            <option value="date-newest">Date (Newest)</option>
+            <option value="date-oldest">Date (Oldest)</option>
+            <option value="amount-lowest">Amount Lowest to Highest</option>
+            <option value="amount-highest">Amount Highest to Lowest</option>
+        </select>
+    </div>
+
+    <div class="expense-list" id="expense-list">
+        <p id="empty-message">No expense added yet.</p>
+    </div>
+
+    <div id="totals">
+        <p>Total: <span id="overall-total">$0.00</span></p>
+        <div id="category-total">
+            <!-- javascript fill -->
+        </div>
+        <p>Count of Expenses: <span id="count">0</span></p>
+        
+    </div>
+</body>
+</html>
