@@ -9,11 +9,35 @@ header {
     border-style:solid;
     border-width: 2px;
     border-color: black;
-    padding: 20px;
+    padding: 20px 60px;
 }
 
 h2 {
     text-decoration: underline;
 }
 
+#expense-list div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+}
 
+#expense-list div:first-child {
+    border-top: 1px solid #eee;
+}
+
+#expense-list span {
+    flex: 1;
+    text-align: left;
+}
+
+#expense-list button {
+    padding: 4px 10px;
+    background: transparent;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
