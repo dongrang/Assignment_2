@@ -12,12 +12,12 @@
 </head>
 
 <body>
-    <h1 class="top-banner">Expense Tracker</h1>
+    <header><h1 class="top-banner">Expense Tracker</h1></header>
     
     <!-- Expense form -->
-    <h2>Add an expense:</h2>
+    
     <form class="expense-form" id ="expense-form"> 
-
+        <h2>Add an expense:</h2>
         <label for="description">Description:</label> <!-- Description -->
         <input type="text" id="description" />
 
@@ -26,7 +26,7 @@
 
         <label for="category">Category:</label> <!-- Category -->
         <select id="category">
-            <option value="" disable selected>Select Category</option>
+            <option value="" disabled selected>Select Category</option>
             <option value="Food">Food</option>
             <option value="Transport">Transport</option>
             <option value="Entertainment">Entertainment</option>
@@ -47,7 +47,7 @@
 
     <!-- Controls -->
     <div class="controls">
-
+        <h2>Filters</h2>
         <label for="filter-category">Filter by Category:</label>
         <select id="filter-category">
             <option value="All">All Categories</option>
@@ -71,20 +71,26 @@
     </div>
 
     <!-- Empty expense list -->
+    <h2>Expenses List:</h2>
     <div class="expense-list" id="expense-list">
+        
         <p id="empty-message">No expense added yet.</p>
     </div>
 
     <!-- Totals -->
-    <div id="totals">
-        <p>Total: <span id="overall-total">$0.00</span>
+    <div class="totals" id="totals">
+        <h2>Totals:</h2>
+        <p>Total: <span id="overall-total">$0.00</span></p>
+
+            <!-- Convert to EUR -->
             <button id="convert-btn">Convert to EUR</button>
             <span id="eur-total"></span>
             <p id="convert-error"></p>
-        </p>
+        
         <div id="category-total">
             <!-- javascript fill -->
         </div>
+
         <p>Count of Expenses: <span id="count">0</span></p>
         
     </div>

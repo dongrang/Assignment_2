@@ -26,12 +26,12 @@ const convertButton = document.getElementById('convert-btn');
 const euroTotal = document.getElementById('eur-total');
 const convertError = document.getElementById('convert-error');
 
-// let expenses = [];
+let expenses = [];
 let activeFilter = 'All';
 let activeSort = 'date-newest';
 
 // testing set
-let expenses = [
+/*let expenses = [
   { id: 1, description: "Groceries", amount: 45.20, category: "Food", date: "2026-06-01" },
   { id: 2, description: "Bus Pass", amount: 30.00, category: "Transport", date: "2026-06-03" },
   { id: 3, description: "Netflix", amount: 15.99, category: "Entertainment", date: "2026-06-05" },
@@ -43,11 +43,14 @@ let expenses = [
   { id: 9, description: "Taxi", amount: 18.75, category: "Transport", date: "2026-06-12" },
   { id: 10, description: "Concert Ticket", amount: 85.00, category: "Entertainment", date: "2026-06-14" }
 ];
+*/
 
-
+// rendering
 function renderExpenses() 
 {
     expenseList.innerHTML = '';
+    updateTotals();
+    saveToLocalStorage();
 
     if(expenses.length === 0)
     {
@@ -68,6 +71,62 @@ function renderExpenses()
     });
     updateTotals();
     saveToLocalStorage();
+}
+
+// filter and sort
+function getDisplayedExpenses(){
+    let result = [...expenses];
+
+    // filter by category
+    if (activeFilter !== 'All'){
+        result = result.filter((expense => expense.category === activeFilter));
+    }
+
+    // sort
+    if (activeSort === 'date-newest'){
+        result.sort((a,b) => new Date(b.date) - new Date(a.date));
+    }   else if (activeSort === 'date-oldest') {
+        result.sort((a,b) => new Date(a.date) - new Date(b.date));
+    }   else if (activeSort === 'amount-lowest') {
+        result.sort((a,b) => a.amount - b.amount);
+    }   else if(activeSort === 'amount-highest'){
+        result.sort((a,b) => b.amount - a.amount);
+    }
+
+    return result;
+}
+
+// totals
+function updateTotals(){
+    const displayed = getDisplayedExpenses();
+
+    // overall total
+    // reduce sums up everything in the expense array, starting at sum which is 0
+    const total = displayed.reduce((sum,expense) => sum + expense.amount,0);
+    overallTotal.textContent = formatCurrency(total);
+
+    // count
+    expenseCount.textContent = displayed.length;
+
+    // category totals
+    const categoryTotals = displayed.reduce((acc,expense) => {
+        if(!acc[expense.category]) {    acc[expense.category] = 0;  }
+        acc[expense.category] += expense.amount;
+        return acc;
+    }, {});
+
+    categoryTotal.innerHTML = '';
+    for (const[category,amount] of Object.entries(categoryTotals)) {
+        categoryTotal.innerHTML += `<p>${category}: ${formatCurrency(amount)}</p>`;
+    }
+}
+
+// currency formating
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(amount);
 }
 
 // adding a new expense to the list
@@ -123,7 +182,7 @@ form.addEventListener('submit',function(e){
 
 // deleting an expense from the list
 expenseList.addEventListener('click',function(e){
-    if(e.target.tagName === 'BUTTON'){
+    if(e.target.tagName === 'BUTTON' && e.target.dataset.id){
         const id = Number(e.target.dataset.id);
 
         // replace expenses with a new array without the expense that matches the id of the 
@@ -132,39 +191,6 @@ expenseList.addEventListener('click',function(e){
         renderExpenses();
     }
 });
-
-// totals
-function updateTotals(){
-    const displayed = getDisplayedExpenses();
-
-    // overall total
-    // reduce sums up everything in the expense array, starting at sum which is 0
-    const total = displayed.reduce((sum,expense) => sum + expense.amount,0);
-    overallTotal.textContent = formatCurrency(total);
-
-    // count
-    expenseCount.textContent = displayed.length;
-
-    // category totals
-    const categoryTotals = displayed.reduce((acc,expense) => {
-        if(!acc[expense.category]) {    acc[expense.category] = 0;  }
-        acc[expense.category] += expense.amount;
-        return acc;
-    }, {});
-
-    categoryTotal.innerHTML = '';
-    for (const[category,amount] of Object.entries(categoryTotals)) {
-        categoryTotal.innerHTML += `<p>${category}: ${formatCurrency(amount)}</p>`;
-    }
-}
-
-// currency formating
-function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-    }).format(amount);
-}
 
 // filter change listener
 filterCategory.addEventListener('change',function(e){
@@ -177,29 +203,6 @@ sortBy.addEventListener('change',function(e){
     activeSort = e.target.value;
     renderExpenses();
 });
-
-// filter and sort
-function getDisplayedExpenses(){
-    let result = [...expenses];
-
-    // filter by category
-    if (activeFilter !== 'All'){
-        result = result.filter((expense => expense.category === activeFilter));
-    }
-
-    // sort
-    if (activeSort === 'date-newest'){
-        result.sort((a,b) => new Date(b.date) - new Date(a.date));
-    }   else if (activeSort === 'date-oldest') {
-        result.sort((a,b) => new Date(a.date) - new Date(b.date));
-    }   else if (activeSort === 'amount-lowest') {
-        result.sort((a,b) => a.amount - b.amount);
-    }   else if(activeSort === 'amount-highest'){
-        result.sort((a,b) => b.amount - a.amount);
-    }
-
-    return result;
-}
 
 /**
  * PART 2: local storage
@@ -224,9 +227,9 @@ function loadFromLocalStorage() {
 /**
  * PART 3: ASYNC
  */
-convertButton.addEventListener('click',converttoEUR);
+convertButton.addEventListener('click',convertToEUR);
 
-async function converttoEUR(){
+async function convertToEUR(){
     convertButton.disabled = true;
     convertButton.textContent = 'Converting...';
     convertError.textContent = '';
