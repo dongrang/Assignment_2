@@ -21,12 +21,17 @@ const overallTotal = document.getElementById('overall-total');
 const categoryTotal = document.getElementById('category-total');
 const expenseCount = document.getElementById('count');
 
-let expenses = [];
+// conversion
+const convertButton = document.getElementById('convert-btn');
+const euroTotal = document.getElementById('eur-total');
+const convertError = document.getElementById('convert-error');
+
+// let expenses = [];
 let activeFilter = 'All';
 let activeSort = 'date-newest';
 
 // testing set
-/* let expenses = [
+let expenses = [
   { id: 1, description: "Groceries", amount: 45.20, category: "Food", date: "2026-06-01" },
   { id: 2, description: "Bus Pass", amount: 30.00, category: "Transport", date: "2026-06-03" },
   { id: 3, description: "Netflix", amount: 15.99, category: "Entertainment", date: "2026-06-05" },
@@ -38,7 +43,7 @@ let activeSort = 'date-newest';
   { id: 9, description: "Taxi", amount: 18.75, category: "Transport", date: "2026-06-12" },
   { id: 10, description: "Concert Ticket", amount: 85.00, category: "Entertainment", date: "2026-06-14" }
 ];
-*/
+
 
 function renderExpenses() 
 {
@@ -47,7 +52,6 @@ function renderExpenses()
     if(expenses.length === 0)
     {
         expenseList.innerHTML = '<p id="empty-message">No expense added yet.</p>';
-        renderExpenses();
         return;
     }
 
@@ -63,6 +67,7 @@ function renderExpenses()
         expenseList.appendChild(row);
     });
     updateTotals();
+    saveToLocalStorage();
 }
 
 // adding a new expense to the list
@@ -186,7 +191,7 @@ function getDisplayedExpenses(){
     if (activeSort === 'date-newest'){
         result.sort((a,b) => new Date(b.date) - new Date(a.date));
     }   else if (activeSort === 'date-oldest') {
-        result.sort((a,b) => new Date(a,date) - new Date(b.date));
+        result.sort((a,b) => new Date(a.date) - new Date(b.date));
     }   else if (activeSort === 'amount-lowest') {
         result.sort((a,b) => a.amount - b.amount);
     }   else if(activeSort === 'amount-highest'){
@@ -197,6 +202,58 @@ function getDisplayedExpenses(){
 }
 
 /**
- * PART 2, local storage
+ * PART 2: local storage
  */
 
+function saveToLocalStorage() {
+    localStorage.setItem('expenses',JSON.stringify(expenses));
+}
+
+function loadFromLocalStorage() {
+    try {
+        const stored = localStorage.getItem('expenses');
+        if(stored){
+            expenses = JSON.parse(stored);
+        }
+    }   
+    catch {
+        expenses = [];
+    }
+}
+
+/**
+ * PART 3: ASYNC
+ */
+convertButton.addEventListener('click',converttoEUR);
+
+async function converttoEUR(){
+    convertButton.disabled = true;
+    convertButton.textContent = 'Converting...';
+    convertError.textContent = '';
+    euroTotal.textContent = '';
+
+    try {
+        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+
+        if(!response.ok) {
+            throw new Error('Bad server response.');
+        }
+
+        const data = await response.json();
+        const rate = data.rates.EUR;
+        const total = getDisplayedExpenses().reduce((sum,expense) => sum + expense.amount,0);
+        const converted = total * rate;
+        euroTotal.textContent = `(€${converted.toFixed(2)} EUR)`;
+    } catch (error) {
+        convertError.textContent = 'Error converting';
+    }
+
+    convertButton.disabled = false;
+    convertButton.textContent = 'Convert to EUR';
+}
+
+/**
+ * load and render
+ */
+loadFromLocalStorage();
+renderExpenses();
